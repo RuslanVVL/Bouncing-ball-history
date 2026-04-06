@@ -42,3 +42,43 @@ int main(int argc, char* args[]) {
 
     bool quit = false;
     SDL_Event e;
+
+    // Выход
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) quit = true;
+        }
+
+        // Физика
+        velY += gravity;
+        posX += velX;
+        posY += velY;
+
+        // Коллизия с полом
+        if (posY + BALL_RADIUS > SCREEN_HEIGHT) {
+            posY = SCREEN_HEIGHT - BALL_RADIUS;
+            velY *= bounce;
+            if (std::abs(velY) < 1.0f) velY = 0; // Гасим микро-прыжки
+        }
+
+        // Коллизии со стенами
+        if (posX + BALL_RADIUS > SCREEN_WIDTH) {
+            posX = SCREEN_WIDTH - BALL_RADIUS;
+            velX = -velX;
+        } else if (posX - BALL_RADIUS < 0) {
+            posX = BALL_RADIUS;
+            velX = -velX;
+        }
+
+        // Цвет экрана
+        SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
+        SDL_RenderClear(renderer);
+
+        // Цвет мяча
+        SDL_SetRenderDrawColor(renderer, 255, 105, 180, 255);
+        FillCircle(renderer, (int)posX, (int)posY, BALL_RADIUS);
+
+        // Отрисовка
+        SDL_RenderPresent(renderer);
+        SDL_Delay(16);
+    }
