@@ -21,3 +21,24 @@ void FillCircle(SDL_Renderer* renderer, int x, int y, int radius) {
         }
     }
 }
+
+// Главная функция
+int main(int argc, char* args[]) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) return -1;
+
+    SDL_Window* window = SDL_CreateWindow("Bouncing Ball SDL2", 
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+        SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    // Характеристики мяча
+    float posX = SCREEN_WIDTH / 2.0f;
+    float posY = 100.0f;
+    float velX = 5.0f;
+    float velY = 0.0f;
+    float gravity = 0.5f;
+    float bounce = -0.95f;
+
+    bool quit = false;
+    SDL_Event e;
